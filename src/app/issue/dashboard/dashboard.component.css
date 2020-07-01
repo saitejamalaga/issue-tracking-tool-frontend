@@ -1,0 +1,105 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+
+body{
+    margin: 0;
+    font-size: .9rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #212529;
+    text-align: left;
+    
+}
+
+
+
+.navbar-laravel
+{
+    box-shadow: 0 2px 4px rgba(0,0,0,.04);
+}
+
+.navbar-brand , .nav-link, .my-form, .login-form
+{
+    font-family: Raleway, sans-serif;
+}
+
+.my-form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.my-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.login-form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.login-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+  }
+
+
+  body{
+  
+    background-image: url("../../../assets/Issue.jpg");
+    position: fixed; 
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    min-width: 100%;
+    min-height: 100%;
+
+  }
+
+.main-border{
+  margin-right: 20px; margin-left: 20px; margin-top: 50px; border: 5px solid orange; border-radius: 5px;
+  }
+
+  a.fa-bell {
+    position: relative;
+    font-size: 2em;
+    color: rgb(175, 175, 175);
+    cursor: pointer;
+  }
+
+  span.fa-comment {
+    position: absolute;
+    font-size: 0.6em;
+    top: -4px;
+    color: red;
+    right: -4px;
+  }
+
+  span.num {
+    position: absolute;
+    font-size: 0.3em;
+    top: 1px;
+    color: #fff;
+    right: 2px;
+  }
+
+  body{
+  
+    background-image: url("../../../assets/Issue.jpg");
+    position: fixed; 
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    min-width: 100%;
+    min-height: 100%;
+
+  }

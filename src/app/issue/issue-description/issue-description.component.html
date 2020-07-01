@@ -1,0 +1,330 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" style="cursor: pointer" [routerLink]="['/dashboard']">Issue Tracking Tool</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+
+            <li class="nav-item active">
+                <a class="nav-link" style="cursor:pointer" [routerLink]="['/dashboard']">Dashboard</a>
+            </li>
+
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="actionbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {{userName}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="actionbarDropdown">
+                    <a class="dropdown-item" style="cursor:pointer" (click)="logout()">Sign Out</a>
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+</nav>
+
+<body>
+    <br><br>
+
+    <ng-container *ngIf="show">
+        <div class="alert alert-success" role="alert" style="margin: 20px;">
+            <h4 class="alert-heading">Watchers</h4>
+            <hr>
+            <div *ngIf="followersList; else noFollowers">
+                <div class="row m-1" *ngFor="let follower of followersList">
+                    <div class="col">
+                        <i class='fa fa-user' style='font-size:20px'></i>&nbsp;
+                        <span><b>{{follower.followerName}}</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #noFollowers>
+                <div style="text-align:center">
+                    No Watchers found!
+                </div>
+            </ng-template>
+        </div>
+    </ng-container>
+
+
+    <div *ngIf="editBlock;else createIssue">
+
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card" style="border: 5px solid black; border-radius: 0;">
+                        <div class="card-header" style="background-color: rgb(255, 177, 60);">
+                            <h5>Edit the Issue</h5>
+                        </div>
+                        <div class="card-body" style=" background-color: black;">
+
+                            <form #createForm="ngForm" (ngSubmit)="editIssue(createForm.value)">
+
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="title"
+                                        class="col-md-4 col-form-label text-md-right">Title</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" [(ngModel)]="currentIssue.title"
+                                            #title="ngModel" name="title" required>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="reporter"
+                                        class="col-md-4 col-form-label text-md-right">Reporter</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" disabled="disabled" type="text"
+                                            name="reporter" [(ngModel)]="currentIssue.reporter" #reporter="ngModel"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="assignee"
+                                        class="col-md-4 col-form-label text-md-right">Assign To</label>
+                                    <div class="col-md-6">
+
+                                        <select name="assignee" placeholder="Select assignee"
+                                            [(ngModel)]="currentIssue.assigneeId" #assigneeId="ngModel"
+                                            class="form-control" required>
+                                            <option value="" disabled>-- Select your option --</option>
+                                            <option *ngFor="let selAssignee of allUsers" [value]="selAssignee.userId">
+                                                {{selAssignee.firstName + ' ' + selAssignee.lastName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="status"
+                                        class="col-md-4 col-form-label text-md-right">Status</label>
+                                    <div class="col-md-6">
+                                        <select name="status" [(ngModel)]="currentIssue.status" #status="ngModel"
+                                            id="inputStatus" class="form-control" placeholder="Select Status" required>
+                                            <option>in-Backlog</option>
+                                            <option>in-Progress</option>
+                                            <option>in-Test</option>
+                                            <option>Done</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="date"
+                                        class="col-md-4 col-form-label text-md-right">Created On</label>
+                                    <div class="col-md-6">
+                                        <input disabled="disabled" type="text" name="date"
+                                            [(ngModel)]="currentIssue.createdOn" #date="ngModel" class="form-control">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="description"
+                                        class="col-md-4 col-form-label text-md-right">Description</label>
+                                    <div class="col-md-6">
+                                        <ejs-richtexteditor #fromRTE name="description"
+                                            [(ngModel)]="currentIssue.description" id="inputDescription">
+                                        </ejs-richtexteditor>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6 offset-md-4">
+                                        <div class="checkbox">
+                                            <label style="color:white">
+                                                <input type="checkbox" [(ngModel)]="isChecked"
+                                                    (change)="followCheckBox(isChecked?'Y':'N')" name="follow"
+                                                    #follow="ngModel">&nbsp;&nbsp;&nbsp;Watch
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-primary"
+                                            [disabled]="!createForm.form.valid">
+                                            Update
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-success" (click)="toggle()"
+                                            data-toggle="modal" data-target="#exampleModalCenter">
+                                            View Watchers
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <ng-template #createIssue>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card" style="border: 5px solid black; border-radius: 0;">
+                        <div class="card-header" style="background-color: rgb(255, 177, 60);">
+                            <h5>Login</h5>
+                        </div>
+                        <div class="card-body" style=" background-color: black;">
+
+                            <form #createForm="ngForm" (ngSubmit)="createNewIssue()">
+
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="title"
+                                        class="col-md-4 col-form-label text-md-right">Title</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" [(ngModel)]="titleText" #title="ngModel"
+                                            name="titleText" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="assignee"
+                                        class="col-md-4 col-form-label text-md-right">Assign To</label>
+                                    <div class="col-md-6">
+                                        <select name="assignee" [(ngModel)]="assigneeText" #assignee="ngModel"
+                                            class="form-control" required>
+                                            <option value="" disabled selected>-- Select assignee --</option>
+                                            <option *ngFor="let assignee of allUsers" [value]="assignee.userId">
+                                                {{assignee.firstName + ' ' + assignee.lastName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="status"
+                                        class="col-md-4 col-form-label text-md-right">Status</label>
+                                    <div class="col-md-6">
+                                        <select name="status" [(ngModel)]="statusText" #status="ngModel"
+                                            id="inputStatus" class="form-control" required>
+                                            <option value="" disabled selected>-- Select status --</option>
+                                            <option>in-Backlog</option>
+                                            <option>in-Progress</option>
+                                            <option>in-Test</option>
+                                            <option>Done</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label style="color : white;" for="description"
+                                        class="col-md-4 col-form-label text-md-right">Description</label>
+                                    <div class="col-md-6">
+                                        <ejs-richtexteditor #fromRTE name="description" [(ngModel)]="descriptionText"
+                                            id="inputDescription"></ejs-richtexteditor>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary" [disabled]="!createForm.form.valid">
+                                        Create
+                                    </button>
+                                </div>
+
+
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ng-template>
+
+    <br><br>
+
+    <div class="container" *ngIf="isComment">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card" style="border: 5px solid black; border-radius: 0;">
+                    <div class="card-header" style="background-color: rgb(255, 177, 60);">
+                        <h5>Comments on this Issue</h5>
+                    </div>
+                    <div class="card-body" style=" background-color: black;">
+
+                        <div *ngIf="commentsList.length">
+                            <div class="alert alert-success" role="alert" style="margin: 20px;">
+                                <h4 class="alert-heading">Comments</h4>
+                                <hr>
+                                <div class="row m-1" *ngFor="let comment of commentsList">
+                                    <div class="col">
+                                        <i class='fa fa-user' style='font-size:20px'></i>&nbsp;
+                                    </div>
+
+                                    <div class="col">
+                                        <span><b>{{comment.commenterName}}</b></span>
+                                        <p class="card-text">
+                                            {{comment.commentText}}
+                                        </p>
+                                    </div>
+                                    <div class="col-3 float-right">
+                                        <small
+                                            class="text-muted float-right text-secondary">{{comment.commentDate | date}}
+                                        </small>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <form #cmnt="ngForm">
+
+
+                            <div class="form-group row">
+                                <label style="color : white;" for="title"
+                                    class="col-md-4 col-form-label text-md-right">Comments</label>
+                                <div class="col-md-6">
+                                    <textarea name="comments" [(ngModel)]="comments" class="form-control" required>
+                                    </textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <button type="submit" (click)="addNewComment()" class="btn btn-primary"
+                                        [disabled]="!cmnt.form.valid">
+                                        Post your Comment
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br><br><br><br><br>
+    <app-footer></app-footer>
+</body>

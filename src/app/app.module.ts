@@ -1,8 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+import { CommonModule } from '@angular/common';
+
 import { AppComponent } from './app.component';
+import { AppService } from './app.service';
+
+//routing 
+import { AppRoutingModule } from './app-routing.module';
+
+import { UserModule } from './user/user.module';
+import { IssueModule } from './issue/issue.module';
+
+import { HttpClientModule } from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+
+//Forms Module
+import { RouterModule, Routes } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -10,9 +27,17 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    CommonModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    RouterModule,
+    ToastrModule.forRoot(),
+    UserModule,
+    IssueModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [AppService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

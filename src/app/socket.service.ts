@@ -14,13 +14,13 @@ import { HttpErrorResponse, HttpParams } from '@angular/common/http'
 
 export class SocketService {
 
-  //private url = "http://api.issuetracker.info";
-  private url = "http://localhost:3000";
+  private baseUrl = 'http://api.issuetrackingtool.online/api/v1';
+  //private baseUrl = "http://localhost:3000/api/v1";
   private socket
   constructor(public http: HttpClient) {
     // console.log("inside socket constructor")
     //first step where connection is established. i.e. Handshake moment
-    this.socket = io(this.url)
+    this.socket = io(this.baseUrl)
   }
 
   //-----------------events to be listened-----------------------

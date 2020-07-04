@@ -13,8 +13,8 @@ import { Observable, throwError } from 'rxjs';
 
 export class AppService {
 
-  //private baseUrl = 'http://api.issuetracker.info/api/v1';
-  private baseUrl = "http://localhost:3000/api/v1";
+  private baseUrl = 'http://api.issuetrackingtool.online/api/v1';
+  //private url = "http://localhost:3000/api/v1";
   constructor(public http: HttpClient) { }
 
 
